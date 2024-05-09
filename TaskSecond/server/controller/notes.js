@@ -1,5 +1,5 @@
 const pool = require("../services/db")
-
+// get all notes
 const getAllNotes = async(req,res)=>{
   const [allnotes] = await pool.query("SELECT * FROM notes"
   );
@@ -7,6 +7,7 @@ const getAllNotes = async(req,res)=>{
   res.status(200).json(allnotes);
 }
 
+// creatnotes
 const createPost = async(req,res)=>{
   const {author,note} = req.body;
     const [result] = await pool.query("INSERT INTO notes(author,note) VALUES(?, ?)",[author,note]);
@@ -15,7 +16,7 @@ const createPost = async(req,res)=>{
 }
 
 
-
+// deletnotes
 const deleteNotes = async(req,res)=>{
     const {id} = req.params;
     try{
