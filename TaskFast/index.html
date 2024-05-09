@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- react js library -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <!-- babel for transpiling -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const { useState } = React;
+
+      const Tabledata = () => {
+        // Initial data for the first column
+        const initialData = ["onboarding call","Google Search Console Access","Google Analytics Access","Website Access","Technical Audit","Anchor Text/URL Mapping","Google Data Studio Report + Local Reporting Suite","site level optimization","On Page Optimization","Content Creation","Content Publishing","Premium Press Release","Authority Niche Placements","Review Management","Index Links","video Recap"];
+
+        // Initialize state for the table data
+        const [tableData, setTableData] = useState(Array.from({ length: 19 }, (_, rowIndex) => {
+          return Array.from({ length: 7 }, (_, cellIndex) => {
+            if (cellIndex === 0) {
+              return initialData[rowIndex] || "";
+            } else {
+              return "";
+            }
+          });
+        }));
+
+        // Function to handle cell value change
+        const handleCellValueChange = (rowIndex, cellIndex, value) => {
+          const newData = [...tableData];
+          newData[rowIndex][cellIndex] = value;
+          setTableData(newData);
+        };
+
+        // Function to send edited data to the server
+        const sendDataToServer = () => {
+          // Send tableData to the server
+          console.log("Data to be sent to the server:", tableData);
+        };
+
+        return (
+          <div>
+            <table>
+              <tbody>
+                {tableData.map((row, rowIndex) => (
+                  <tr key={rowIndex}>
+                    {row.map((cell, cellIndex) => (
+                      <td key={cellIndex}>
+                        <input
+                          type="text"
+                          value={cell}
+                          onChange={(e) => handleCellValueChange(rowIndex, cellIndex, e.target.value)}
+                        />
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button onClick={sendDataToServer}>Send Data to Server</button>
+          </div>
+        );
+      };
+
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(<Tabledata />);
+    </script>
+</body>
+</html>
+

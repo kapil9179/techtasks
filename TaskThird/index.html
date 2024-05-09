@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- react js library -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <!-- babel for transpiling -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+       const {useState} = React
+       const HandelHeaders = ()=>{
+          const[phoneNumber,setPhoneNumber] = useState("");
+          const [Headers,setHeaders] = useState("")
+
+          const handelchange = (event)=>{
+            setPhoneNumber(event.target.value);
+          }
+
+          const handelOnSubmit = async(event)=>{
+            event.preventDefault();
+            const response = await fetch('https://chimpu.xyz/api/post.php',{
+                method:"POST",
+                body:JSON.stringify(phoneNumber),
+                headers:{
+                    "content-type":"application/json"
+                }
+            });
+             console.log(response);
+
+            let headers="";
+            for(let pair of response.headers.entries()){
+                headers += `${pair[0]}: ${pair[1]}\n`;
+            }
+            setHeaders(headers)
+          };
+
+        return(
+        <div>
+        <form onSubmit={(event)=>handelOnSubmit(event)}>
+           <label>
+            phoneNumber:
+             <input type="text"
+             value={phoneNumber}
+             onChange={(event)=>handelchange(event)}
+             />
+            </label>
+            <input type="submit" value="Submit" />
+        </form>
+        <pre>{Headers}</pre>
+        </div>
+     )
+   }
+     const container = document.getElementById("root");
+        const root =  ReactDOM.createRoot(container);
+        root.render(<HandelHeaders/>)
+    </script>
+</body>
+</html>
